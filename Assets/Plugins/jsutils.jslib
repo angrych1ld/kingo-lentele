@@ -2,10 +2,13 @@
 
   WriteCurrentGame: function (str) {
     localStorage.setItem('currentGame', str);
+    Console.write('writing current game: ' + str);
   },
 
   ReadCurrentGame: function () {
-    return localStorage.getItem('currentGame');
+  	const str = localStorage.getItem('currentGame');
+    Console.write('reading current game: ' + str);
+    return str;
   },
 
   WriteHistoricalData: function (str) {
