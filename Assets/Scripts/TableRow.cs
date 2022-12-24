@@ -27,8 +27,9 @@ public class TableRow : MonoBehaviour
         }
     }
 
-    public void ApplyState(PlayerState state, int totalScore)
+    public void ApplyState(GameState gameState, int row, int totalScore)
     {
+        PlayerState state = gameState.players[row];
         if (cells.Count != state.rounds.Length)
         {
             foreach (TableCell c in cellParent.GetComponentsInChildren<TableCell>())
@@ -46,7 +47,7 @@ public class TableRow : MonoBehaviour
 
         for (int i = 0; i < state.rounds.Length && i < cells.Count; i++)
         {
-            cells[i].ApplyState(state.rounds[i]);
+            cells[i].ApplyState(gameState, row, i);
         }
 
         nameText.text = state.playerName + "\n" + totalScore;

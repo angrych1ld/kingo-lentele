@@ -29,7 +29,7 @@ public class Table : MonoBehaviour
         int[] totalScores = CalculateScores(state);
         for (int i = 0; i < state.players.Length && i < rows.Count; i++)
         {
-            rows[i].ApplyState(state.players[i], totalScores[i]);
+            rows[i].ApplyState(state, i, totalScores[i]);
         }
     }
 
