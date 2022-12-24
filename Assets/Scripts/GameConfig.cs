@@ -10,6 +10,7 @@ public class GameConfig : ScriptableObject
     [System.Serializable]
     public class RoundConfig
     {
+        public string title;
         public int tickCount;
         public int tickValue;
     }

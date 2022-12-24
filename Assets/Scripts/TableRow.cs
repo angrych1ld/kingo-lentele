@@ -27,7 +27,7 @@ public class TableRow : MonoBehaviour
         }
     }
 
-    public void ApplyState(PlayerState state)
+    public void ApplyState(PlayerState state, int totalScore)
     {
         if (cells.Count != state.rounds.Length)
         {
@@ -48,6 +48,7 @@ public class TableRow : MonoBehaviour
         {
             cells[i].ApplyState(state.rounds[i]);
         }
-        nameText.text = state.playerName;
+
+        nameText.text = state.playerName + "\n" + totalScore;
     }
 }

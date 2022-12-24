@@ -29,7 +29,7 @@ public class Overlord : MonoBehaviour
     public void StartGame(GameState state)
     {
         currentState = state;
-        table.ApplyGameState(currentState);
+        table.ApplyGameState(currentState, configs[currentState.players.Length]);
         menu.gameObject.SetActive(false);
         roundMenu.gameObject.SetActive(false);
     }
@@ -62,15 +62,17 @@ public class Overlord : MonoBehaviour
 
     public void OnRoundMenuApplyClick(int rowIndex, int cellIndex)
     {
+        GameConfig config = configs[currentState.players.Length];
+
         for (int i = 0; i < currentState.players.Length; i++)
         {
             currentState.players[rowIndex].rounds[cellIndex].points[i]
                 = Mathf.RoundToInt(roundMenu.sliders[i].slider.value) *
-                configs[currentState.players.Length].rounds[cellIndex].tickValue;
+                config.rounds[cellIndex].tickValue;
         }
 
         SaveManager.SaveCurrentGame(currentState);
-        table.ApplyGameState(currentState);
+        table.ApplyGameState(currentState, config);
         roundMenu.gameObject.SetActive(false);
     }
 }

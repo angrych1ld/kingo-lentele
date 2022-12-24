@@ -2,25 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Runtime.InteropServices;
+using System;
+using System.Text;
 
-public class SaveManager : MonoBehaviour
+public class SaveManager
 {
+    [DllImport("__Internal")]
+    private static extern void WriteCurrentGame(string str);
+
+    [DllImport("__Internal")]
+    private static extern string ReadCurrentGame();
+
+    [DllImport("__Internal")]
+    private static extern void WriteHistoricalData(string str);
+
+    [DllImport("__Internal")]
+    private static extern string ReadHistoricalData();
+
     public static void SaveCurrentGame(GameState state)
     {
-        File.WriteAllText(Application.persistentDataPath + "/save.json", state.Serialize());
+        byte[] bytes = state.Serialize();
+        string data = Encoding.ASCII.GetString(bytes);
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WriteCurrentGame(data);
+#else
+        File.WriteAllText(Application.persistentDataPath + "/currentGame.data", data);
+#endif
     }
 
     public static GameState LoadCurrentGame()
     {
         string data = null;
+
         try
         {
-            data = File.ReadAllText(Application.persistentDataPath + "/save.json");
+#if UNITY_WEBGL && !UNITY_EDITOR
+            data = ReadCurrentGame();
+#else
+            data = File.ReadAllText(Application.persistentDataPath + "/currentGame.data").Replace(Environment.NewLine, "");
+#endif
+
+            byte[] bytes = Encoding.ASCII.GetBytes(data);
+            return GameState.Deserialize(bytes, 0);
         }
-        catch
+        catch (Exception e)
         {
+            Debug.LogError(e);
             return GameState.New("nėra", "nėra", "nėra");
         }
-        return GameState.Deserialize(data);
     }
 }

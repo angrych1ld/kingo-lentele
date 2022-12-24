@@ -8,7 +8,7 @@ public class Table : MonoBehaviour
     [SerializeField] private Transform rowParent = null;
     private List<TableRow> rows = new List<TableRow>();
 
-    public void ApplyGameState(GameState state)
+    public void ApplyGameState(GameState state, GameConfig config)
     {
         if (rows.Count != state.players.Length)
         {
@@ -26,9 +26,26 @@ public class Table : MonoBehaviour
             }
         }
 
+        int[] totalScores = CalculateScores(state);
         for (int i = 0; i < state.players.Length && i < rows.Count; i++)
         {
-            rows[i].ApplyState(state.players[i]);
+            rows[i].ApplyState(state.players[i], totalScores[i]);
         }
+    }
+
+    private int[] CalculateScores(GameState state)
+    {
+        int[] scores = new int[state.players.Length];
+        for (int i = 0; i < state.players.Length; i++)
+        {
+            for (int j = 0; j < state.players[i].rounds.Length; j++)
+            {
+                for (int k = 0; k < state.players[i].rounds[j].points.Length; k++)
+                {
+                    scores[k] += state.players[i].rounds[j].points[k];
+                }
+            }
+        }
+        return scores;
     }
 }

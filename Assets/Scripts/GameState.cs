@@ -1,13 +1,14 @@
 ﻿using System;
 using UnityEngine;
 using System.Linq;
+using System.IO;
+using System.Text;
 
 [System.Serializable]
 public struct GameState
 {
     public const int ROUNDS_PER_PLAYER = 10;
 
-    public Guid guid;
     public PlayerState[] players;
 
     public float GetCompletion()
@@ -34,31 +35,72 @@ public struct GameState
         return ((float)completed) / total;
     }
 
-    public static GameState Deserialize(string data)
+    public static GameState Deserialize(byte[] data, int start)
     {
-        try
+        using (var stream = new MemoryStream(data))
         {
-            return JsonUtility.FromJson<GameState>(data);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e);
-        }
+            stream.Seek(start, SeekOrigin.Begin);
+            using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+            {
+                int playerCount = reader.ReadByte();
 
+                GameState state = new GameState
+                {
+                    players = new PlayerState[playerCount]
+                };
 
-        return New("nėra", "nėra", "nėra");
+                for (int i = 0; i < playerCount; i++)
+                {
+                    state.players[i].playerName = reader.ReadString();
+
+                    state.players[i].rounds = new RoundState[ROUNDS_PER_PLAYER];
+
+                    for (int j = 0; j < ROUNDS_PER_PLAYER; j++)
+                    {
+                        state.players[i].rounds[j].points = new int[playerCount];
+                        for (int k = 0; k < playerCount; k++)
+                        {
+                            state.players[i].rounds[j].points[k] = reader.ReadInt16();
+                        }
+                    }
+                }
+
+                return state;
+            }
+        }
     }
 
-    public string Serialize()
+    public byte[] Serialize()
     {
-        return JsonUtility.ToJson(this);
+        using (var stream = new MemoryStream())
+        {
+            using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+            {
+                int playerCount = players.Length;
+                writer.Write((byte)playerCount);
+
+                for (int i = 0; i < playerCount; i++)
+                {
+                    writer.Write(players[i].playerName);
+                    for (int j = 0; j < ROUNDS_PER_PLAYER; j++)
+                    {
+                        for (int k = 0; k < playerCount; k++)
+                        {
+                            writer.Write((short)players[i].rounds[j].points[k]);
+                        }
+                    }
+                }
+
+                byte[] bytes = stream.ToArray();
+                return bytes;
+            }
+        }
     }
 
     public static GameState New(params string[] playerNames)
     {
         return new GameState
         {
-            guid = Guid.NewGuid(),
             players = playerNames.Select(n => new PlayerState
             {
                 playerName = n,

@@ -13,23 +13,33 @@ MonoBehaviour:
   m_Name: 3 PlayerConfig
   m_EditorClassIdentifier: 
   rounds:
-  - tickCount: 1
+  - title: Kingas
+    tickCount: 1
     tickValue: -40
-  - tickCount: 4
+  - title: Bartukai
+    tickCount: 4
     tickValue: -10
-  - tickCount: 4
+  - title: Damos
+    tickCount: 4
     tickValue: -10
-  - tickCount: 8
+  - title: "\u010Cirvai"
+    tickCount: 8
     tickValue: -5
-  - tickCount: 10
+  - title: "Kir\u010Diai"
+    tickCount: 10
     tickValue: -4
-  - tickCount: 2
+  - title: Du Paskutiniai
+    tickCount: 2
     tickValue: -20
-  - tickCount: 240
+  - title: "Erala\u0161as -"
+    tickCount: 240
     tickValue: -1
-  - tickCount: 240
+  - title: "Erala\u0161as +"
+    tickCount: 240
     tickValue: 1
-  - tickCount: 10
+  - title: "Atsilo\u0161imas 1"
+    tickCount: 10
     tickValue: 12
-  - tickCount: 10
+  - title: "Atsilo\u0161imas 2"
+    tickCount: 10
     tickValue: 12

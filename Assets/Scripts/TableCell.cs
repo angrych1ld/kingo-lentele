@@ -7,6 +7,7 @@ public class TableCell : MonoBehaviour
 {
     [SerializeField] private Text symbolText = null;
     [SerializeField] private Button cellButton = null;
+    [SerializeField] private Image bgImage = null;
 
     public string[] symbols = new string[] { "K", "B", "D", "C", "KIR", "2P", "E-", "E+", "1A", "2A" };
 
@@ -22,19 +23,16 @@ public class TableCell : MonoBehaviour
 
     public void ApplyState(RoundState state)
     {
-        bool inter = true;
+        bool played = false;
         for (int i = 0; i < state.points.Length; i++)
         {
             if (state.PointsAssigned())
             {
-                inter = false;
+                played = true;
             }
         }
 
-        if (cellButton.interactable != inter)
-        {
-            cellButton.interactable = inter;
-        }
+        bgImage.color = played ? Color.gray : Color.white;
     }
 
     public void OnCellClick()
