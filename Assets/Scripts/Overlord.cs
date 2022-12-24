@@ -15,6 +15,18 @@ public class Overlord : MonoBehaviour
 
     private GameState currentState;
 
+    public GameConfig currentConfig
+    {
+        get
+        {
+            if (configs[currentState.players.Length] == null || currentState.players.Length < 0 || currentState.players.Length >= configs.Length)
+            {
+                return configs[3];
+            }
+            return configs[currentState.players.Length];
+        }
+    }
+
 
     private void Awake()
     {
@@ -29,7 +41,7 @@ public class Overlord : MonoBehaviour
     public void StartGame(GameState state)
     {
         currentState = state;
-        table.ApplyGameState(currentState, configs[currentState.players.Length]);
+        table.ApplyGameState(currentState, currentConfig);
         menu.gameObject.SetActive(false);
         roundMenu.gameObject.SetActive(false);
     }
@@ -45,7 +57,7 @@ public class Overlord : MonoBehaviour
             currentState,
             rowIndex,
             cellIndex,
-            configs[currentState.players.Length].rounds[cellIndex]);
+            currentConfig.rounds[cellIndex]);
         roundMenu.gameObject.SetActive(true);
     }
 
@@ -62,7 +74,7 @@ public class Overlord : MonoBehaviour
 
     public void OnRoundMenuApplyClick(int rowIndex, int cellIndex)
     {
-        GameConfig config = configs[currentState.players.Length];
+        GameConfig config = currentConfig;
 
         for (int i = 0; i < currentState.players.Length; i++)
         {
