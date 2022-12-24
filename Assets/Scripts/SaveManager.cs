@@ -23,13 +23,11 @@ public class SaveManager
     public static void SaveCurrentGame(GameState state)
     {
         byte[] bytes = state.Serialize();
-        string data = Encoding.ASCII.GetString(bytes);
+        string data = Convert.ToBase64String(bytes);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-Debug.Log("Using local storage");
         WriteCurrentGame(data);
 #else
-        Debug.Log("Using file system");
         File.WriteAllText(Application.persistentDataPath + "/currentGame.data", data);
 #endif
     }
@@ -46,7 +44,7 @@ Debug.Log("Using local storage");
             data = File.ReadAllText(Application.persistentDataPath + "/currentGame.data").Replace(Environment.NewLine, "");
 #endif
 
-            byte[] bytes = Encoding.ASCII.GetBytes(data);
+            byte[] bytes = Convert.FromBase64String(data);
             return GameState.Deserialize(bytes, 0);
         }
         catch (Exception e)

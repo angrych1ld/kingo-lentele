@@ -37,7 +37,7 @@ public struct GameState
 
     public static GameState Deserialize(byte[] data, int start)
     {
-        using (var stream = new MemoryStream(data))
+        using (var stream = new MemoryStream(data, start, data.Length - start, false))
         {
             stream.Seek(start, SeekOrigin.Begin);
             using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
