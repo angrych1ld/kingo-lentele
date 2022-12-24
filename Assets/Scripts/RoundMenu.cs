@@ -29,9 +29,9 @@ public class RoundMenu : MonoBehaviour
         this.rowIndex = rowIndex;
         this.cellIndex = cellIndex;
 
-        for (int i = state.points.Length - 1; i < sliders.Length; i++)
+        for (int i = 0; i < sliders.Length; i++)
         {
-            sliders[i].gameObject.SetActive(false);
+            sliders[i].gameObject.SetActive(i < state.points.Length);
         }
 
         for (int i = 0; i < state.points.Length; i++)

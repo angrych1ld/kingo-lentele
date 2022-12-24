@@ -26,8 +26,10 @@ public class SaveManager
         string data = Encoding.ASCII.GetString(bytes);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
+Debug.Log("Using local storage");
         WriteCurrentGame(data);
 #else
+        Debug.Log("Using file system");
         File.WriteAllText(Application.persistentDataPath + "/currentGame.data", data);
 #endif
     }
