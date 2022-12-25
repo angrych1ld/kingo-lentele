@@ -24,7 +24,7 @@ public class SaveManager
     {
         byte[] bytes = state.Serialize();
         string data = Convert.ToBase64String(bytes);
-
+        Debug.Log("Writing save " + data);
 #if UNITY_WEBGL && !UNITY_EDITOR
         WriteCurrentGame(data);
 #else

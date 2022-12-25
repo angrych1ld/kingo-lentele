@@ -1,6 +1,7 @@
 ﻿mergeInto(LibraryManager.library, {
 
   WriteCurrentGame: function (str) {
+  console.log('js write: ' + str);
     localStorage.setItem('currentGame', str);
   },
 
