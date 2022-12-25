@@ -7,7 +7,11 @@
   ReadCurrentGame: function () {
     var returnStr = localStorage.getItem('currentGame');
 
-    var bufferSize = lengthBytesUTF8(returnStr) + 1;
+    if (!returnStr) {
+        returnStr = '';
+    }
+
+    var bufferSize = lengthBytesUTF8(returnStr);
     var buffer = _malloc(bufferSize);
     stringToUTF8(returnStr, buffer, bufferSize);
     return buffer;
@@ -20,7 +24,11 @@
   ReadHistoricalData: function () {
     var returnStr = localStorage.getItem('historicalData');
 
-    var bufferSize = lengthBytesUTF8(returnStr) + 1;
+    if (!returnStr) {
+        returnStr = '';
+    }
+
+    var bufferSize = lengthBytesUTF8(returnStr);
     var buffer = _malloc(bufferSize);
     stringToUTF8(returnStr, buffer, bufferSize);
     return buffer;
