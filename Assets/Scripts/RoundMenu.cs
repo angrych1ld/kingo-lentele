@@ -7,6 +7,7 @@ public class RoundMenu : MonoBehaviour
 {
     public RoundSlider[] sliders = new RoundSlider[4];
     [SerializeField] private Text titleText = null;
+    [SerializeField] private Button applyButton = null;
 
     private int rowIndex;
     private int cellIndex;
@@ -41,22 +42,25 @@ public class RoundMenu : MonoBehaviour
             sliders[i].playerName = gameState.players[i].playerName;
         }
 
-        UpdateSliderLabels();
+        UpdateMenuState();
     }
 
     private void OnSliderChanged(float v)
     {
-        UpdateSliderLabels();
+        UpdateMenuState();
     }
 
-    private void UpdateSliderLabels()
+    private void UpdateMenuState()
     {
+        int totalTicks = 0;
         for (int i = 0; i < sliders.Length; i++)
         {
             sliders[i].text.text = sliders[i].playerName + " " +
                 sliders[i].slider.value * roundConfig.tickValue +
                 "(" + sliders[i].slider.value + ")";
+            totalTicks += (int)sliders[i].slider.value;
         }
+        applyButton.interactable = totalTicks == roundConfig.tickCount;
     }
 
     public void OnCloseClick()

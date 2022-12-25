@@ -28,6 +28,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnNew3PlayersClick()
     {
+        SaveManager.AppendHistoricalGame(SaveManager.LoadCurrentGame());
         SaveManager.SaveCurrentGame(GameState.New(
             playerNameInputs.Take(3).Select(i => i.text).ToArray()));
         Overlord.instance.StartGame(SaveManager.LoadCurrentGame());
@@ -35,6 +36,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnNew4PlayersClick()
     {
+        SaveManager.AppendHistoricalGame(SaveManager.LoadCurrentGame());
         SaveManager.SaveCurrentGame(GameState.New(
             playerNameInputs.Take(4).Select(i => i.text).ToArray()));
         Overlord.instance.StartGame(SaveManager.LoadCurrentGame());

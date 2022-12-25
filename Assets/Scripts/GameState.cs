@@ -92,7 +92,6 @@ public struct GameState
                 }
 
                 byte[] bytes = stream.ToArray();
-                Debug.Log("Serialized bytes " + bytes.Length + " " + string.Join(", ", bytes));
                 return bytes;
             }
         }
