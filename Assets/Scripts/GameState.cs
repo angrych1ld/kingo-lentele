@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [System.Serializable]
 public struct GameState
@@ -35,15 +37,48 @@ public struct GameState
         return ((float)completed) / total;
     }
 
+    public int[] CalculateScores()
+    {
+        int[] scores = new int[players.Length];
+        for (int i = 0; i < players.Length; i++)
+        {
+            for (int j = 0; j < players[i].rounds.Length; j++)
+            {
+                for (int k = 0; k < players[i].rounds[j].points.Length; k++)
+                {
+                    scores[k] += players[i].rounds[j].points[k];
+                }
+            }
+        }
+        return scores;
+    }
+
+    public static List<GameState> DeserializeArray(byte[] rawData)
+    {
+        if (rawData.Length < 10)
+        {
+            return new List<GameState>();
+        }
+
+        List<GameState> results = new List<GameState>();
+        for (int i = 0; i < rawData.Length;)
+        {
+            int length = BitConverter.ToInt32(rawData, i);
+            results.Add(Deserialize(rawData, i + 4));
+            i += 4 + length;
+
+        }
+
+        return results;
+    }
+
     public static GameState Deserialize(byte[] data, int start)
     {
         using (var stream = new MemoryStream(data, start, data.Length - start, false))
         {
-            stream.Seek(start, SeekOrigin.Begin);
             using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
             {
                 int playerCount = reader.ReadByte();
-
                 GameState state = new GameState
                 {
                     players = new PlayerState[playerCount]

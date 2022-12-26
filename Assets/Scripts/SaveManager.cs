@@ -20,6 +20,26 @@ public class SaveManager
     [DllImport("__Internal")]
     private static extern string ReadHistoricalData();
 
+    public static byte[] GetHistoricalData()
+    {
+        string historicalDataString = "";
+        try
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        historicalDataString = ReadHistoricalData();
+#else
+            historicalDataString = File.ReadAllText(Application.persistentDataPath + "/historicalData.data");
+#endif
+        }
+        catch
+        {
+            Debug.LogWarning("Couldnt load historical data");
+            historicalDataString = "";
+        }
+        byte[] historicalData = Convert.FromBase64String(historicalDataString);
+        return historicalData;
+    }
+
     public static void AppendHistoricalGame(GameState state)
     {
         string historicalDataString = "";

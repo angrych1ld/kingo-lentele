@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,6 +11,13 @@ public class MainMenu : MonoBehaviour
     public Button p3Button;
     public Button p4Button;
     public InputField[] playerNameInputs = new InputField[4];
+
+    public GameObject historicalDataParent;
+    public Transform pastGamesParent;
+    public PastGamePlayerEntry pastGameEntryPrefab;
+    public List<PastGamePlayerEntry> pastGameEntries = new List<PastGamePlayerEntry>();
+
+    private HistoricalAnalysis historicalAnalysis;
 
     private void OnEnable()
     {
@@ -19,6 +27,47 @@ public class MainMenu : MonoBehaviour
             "% baigta - " +
             string.Join(", ", existing.players.Select(p => p.playerName));
         OnPlayerNameInputChanged();
+
+        byte[] historicalData = SaveManager.GetHistoricalData();
+        List<GameState> historicalGames = GameState.DeserializeArray(historicalData);
+        historicalAnalysis = HistoricalAnalysis.Create(historicalGames);
+
+        if (historicalAnalysis.games.Count == 0)
+        {
+            historicalDataParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            historicalDataParent.gameObject.SetActive(true);
+            UpdatePastGames(historicalAnalysis);
+        }
+    }
+
+    private void UpdatePastGames(HistoricalAnalysis historicalAnalysis)
+    {
+        foreach (PastGamePlayerEntry entry in pastGameEntries)
+        {
+            Destroy(entry.gameObject);
+        }
+        pastGameEntries.Clear();
+
+        for (int i = 0; i < historicalAnalysis.games.Count && i < 5; i++)
+        {
+            HistoricalAnalysis.Game game = historicalAnalysis.games[i];
+            for (int j = 0; j < 4; j++)
+            {
+                PastGamePlayerEntry entry = Instantiate(pastGameEntryPrefab, pastGamesParent);
+                pastGameEntries.Add(entry);
+                int maxScore = Mathf.Max(game.scores);
+                entry.text.text = j < game.scores.Length
+                    ? game.gameState.players[j].playerName + ": " + game.scores[j]
+                    : "";
+                if (j < game.scores.Length && game.scores[j] == maxScore)
+                {
+                    entry.text.fontStyle = FontStyle.Bold;
+                }
+            }
+        }
     }
 
     public void OnContinueClick()

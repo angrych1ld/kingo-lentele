@@ -26,26 +26,10 @@ public class Table : MonoBehaviour
             }
         }
 
-        int[] totalScores = CalculateScores(state);
+        int[] totalScores = state.CalculateScores();
         for (int i = 0; i < state.players.Length && i < rows.Count; i++)
         {
             rows[i].ApplyState(state, i, totalScores[i]);
         }
-    }
-
-    private int[] CalculateScores(GameState state)
-    {
-        int[] scores = new int[state.players.Length];
-        for (int i = 0; i < state.players.Length; i++)
-        {
-            for (int j = 0; j < state.players[i].rounds.Length; j++)
-            {
-                for (int k = 0; k < state.players[i].rounds[j].points.Length; k++)
-                {
-                    scores[k] += state.players[i].rounds[j].points[k];
-                }
-            }
-        }
-        return scores;
     }
 }
