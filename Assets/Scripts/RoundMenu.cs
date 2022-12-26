@@ -60,7 +60,7 @@ public class RoundMenu : MonoBehaviour
                 "(" + sliders[i].slider.value + ")";
             totalTicks += (int)sliders[i].slider.value;
         }
-        applyButton.interactable = totalTicks == roundConfig.tickCount;
+        applyButton.interactable = totalTicks == roundConfig.tickCount || totalTicks == 0;
     }
 
     public void OnCloseClick()

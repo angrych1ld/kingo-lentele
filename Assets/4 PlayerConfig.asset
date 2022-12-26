@@ -16,10 +16,10 @@ MonoBehaviour:
   - title: Kingas
     tickCount: 1
     tickValue: -40
-  - title: Bartukai
+  - title: Damos
     tickCount: 4
     tickValue: -10
-  - title: Damos
+  - title: Bartukai
     tickCount: 4
     tickValue: -10
   - title: "\u010Cirvai"
