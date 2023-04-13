@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TableRow : MonoBehaviour
 {
-    public Text nameText;
+    public TextMeshProUGUI nameText;
 
     [SerializeField] private TableCell cellPrefab = null;
     [SerializeField] private Transform cellParent = null;
@@ -22,7 +23,7 @@ public class TableRow : MonoBehaviour
         for (int i = 0; i < cellCount; i++)
         {
             TableCell c = Instantiate(cellPrefab, cellParent);
-            c.Initialize(c.symbols[i], rowIndex, i);
+            c.Initialize(c.titles[i], c.symbols[i], rowIndex, i);
             cells.Add(c);
         }
     }
@@ -50,6 +51,6 @@ public class TableRow : MonoBehaviour
             cells[i].ApplyState(gameState, row, i);
         }
 
-        nameText.text = state.playerName + "\n" + totalScore;
+        nameText.text = "<nobr>" + state.playerName + "</nobr>" + "\n" + totalScore;
     }
 }

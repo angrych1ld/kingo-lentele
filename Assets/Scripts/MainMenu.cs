@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.Threading.Tasks;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
-    public Text existingGameText;
+    public TextMeshProUGUI existingGameText;
     public Button p3Button;
     public Button p4Button;
-    public InputField[] playerNameInputs = new InputField[4];
+    public TMP_InputField[] playerNameInputs = new TMP_InputField[4];
 
     public GameObject historicalDataParent;
     public Transform pastGamesParent;
@@ -19,13 +20,30 @@ public class MainMenu : MonoBehaviour
 
     private HistoricalAnalysis historicalAnalysis;
 
+    private void Awake()
+    {
+        foreach (var input in playerNameInputs)
+        {
+            input.onValueChanged.AddListener((s) => OnPlayerNameInputChanged());
+        }
+    }
+
     private void OnEnable()
     {
         GameState existing = SaveManager.LoadCurrentGame();
+        int[] scores = existing.CalculateScores();
+
         existingGameText.text =
             Mathf.FloorToInt(existing.GetCompletion() * 100) +
-            "% baigta - " +
-            string.Join(", ", existing.players.Select(p => p.playerName));
+            "% baigta" + System.Environment.NewLine;
+        for (int i = 0; i < scores.Length; i++)
+        {
+            existingGameText.text += "<nobr>" + existing.players[i].playerName + "</nobr>" +
+                " - " + scores[i] + System.Environment.NewLine;
+        }
+
+
+
         OnPlayerNameInputChanged();
 
         byte[] historicalData = SaveManager.GetHistoricalData();
@@ -51,7 +69,7 @@ public class MainMenu : MonoBehaviour
         }
         pastGameEntries.Clear();
 
-        for (int i = 0; i < historicalAnalysis.games.Count && i < 5; i++)
+        for (int i = 0; i < historicalAnalysis.games.Count && i < 10; i++)
         {
             HistoricalAnalysis.Game game = historicalAnalysis.games[i];
             for (int j = 0; j < 4; j++)
@@ -60,11 +78,11 @@ public class MainMenu : MonoBehaviour
                 pastGameEntries.Add(entry);
                 int maxScore = Mathf.Max(game.scores);
                 entry.text.text = j < game.scores.Length
-                    ? game.gameState.players[j].playerName + ": " + game.scores[j]
+                    ? "<nobr>" + game.gameState.players[j].playerName + "</nobr>" + ": " + game.scores[j]
                     : "";
                 if (j < game.scores.Length && game.scores[j] == maxScore)
                 {
-                    entry.text.fontStyle = FontStyle.Bold;
+                    entry.text.fontStyle = TMPro.FontStyles.Underline;
                 }
             }
         }

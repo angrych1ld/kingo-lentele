@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RoundMenu : MonoBehaviour
 {
     public RoundSlider[] sliders = new RoundSlider[4];
-    [SerializeField] private Text titleText = null;
+    [SerializeField] private TextMeshProUGUI titleText = null;
     [SerializeField] private Button applyButton = null;
 
     private int rowIndex;
@@ -55,7 +56,7 @@ public class RoundMenu : MonoBehaviour
         int totalTicks = 0;
         for (int i = 0; i < sliders.Length; i++)
         {
-            sliders[i].text.text = sliders[i].playerName + " " +
+            sliders[i].text.text = sliders[i].playerName + System.Environment.NewLine +
                 sliders[i].slider.value * roundConfig.tickValue +
                 "(" + sliders[i].slider.value + ")";
             totalTicks += (int)sliders[i].slider.value;

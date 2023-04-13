@@ -36,6 +36,8 @@ public class Overlord : MonoBehaviour
     private void Start()
     {
         menu.gameObject.SetActive(true);
+        table.gameObject.SetActive(false);
+        roundMenu.gameObject.SetActive(false);
     }
 
     public void StartGame(GameState state)
@@ -44,6 +46,7 @@ public class Overlord : MonoBehaviour
         table.ApplyGameState(currentState, currentConfig);
         menu.gameObject.SetActive(false);
         roundMenu.gameObject.SetActive(false);
+        table.gameObject.SetActive(true);
     }
 
     public void OnCellClick(int rowIndex, int cellIndex)
@@ -64,6 +67,7 @@ public class Overlord : MonoBehaviour
     public void OnMenuButtonClick()
     {
         menu.gameObject.SetActive(true);
+        table.gameObject.SetActive(false);
         roundMenu.gameObject.SetActive(false);
     }
 

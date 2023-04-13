@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PastGamePlayerEntry : MonoBehaviour
 {
-    public Text text;
+    public TextMeshProUGUI text;
 }

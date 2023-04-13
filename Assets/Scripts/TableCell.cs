@@ -2,23 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TableCell : MonoBehaviour
 {
-    [SerializeField] private Text symbolText = null;
+    [SerializeField] private TextMeshProUGUI centerText = null;
+    [SerializeField] private TextMeshProUGUI topLeftText;
+    [SerializeField] private TextMeshProUGUI botRightText;
+
     [SerializeField] private Button cellButton = null;
     [SerializeField] private Image bgImage = null;
     [SerializeField] private GameObject scoresContainer = null;
-    [SerializeField] private Text[] scores = new Text[0];
+    [SerializeField] private TextMeshProUGUI[] scores = new TextMeshProUGUI[0];
 
-    public string[] symbols = new string[] { "K", "B", "D", "C", "KIR", "2P", "E-", "E+", "1A", "2A" };
+    [SerializeField] private Sprite emptyCardSprite;
+    [SerializeField] private Sprite cardBgSprite;
+
+    public string[] symbols = new string[] { "K", "B", "D", "♥", "K", "2", "E-", "E+", "1A", "2A" };
+    public string[] titles = new string[] {
+        "Kingas",
+        "Bartukai",
+        "Damos",
+        "Čirvai",
+        "Kirčiai",
+        "Du Paskutiniai",
+        "Minusinis Eralašas",
+        "Pliusinis Eralašas",
+        "Pirmasis Atsilošimas",
+        "Antrasis Atsilošimas"
+    };
 
     private int rowIndex;
     private int cellIndex;
 
-    public void Initialize(string symbol, int rowIndex, int cellIndex)
+    public void Initialize(string title, string symbol, int rowIndex, int cellIndex)
     {
-        symbolText.text = symbol;
+        centerText.text = title;
+        topLeftText.text = symbol;
+        botRightText.text = symbol;
         this.rowIndex = rowIndex;
         this.cellIndex = cellIndex;
     }
@@ -37,8 +58,10 @@ public class TableCell : MonoBehaviour
 
         if (played)
         {
-            bgImage.color = Color.gray;
-            symbolText.gameObject.SetActive(false);
+            bgImage.sprite = cardBgSprite;
+            centerText.gameObject.SetActive(false);
+            topLeftText.gameObject.SetActive(false);
+            botRightText.gameObject.SetActive(false);
             scoresContainer.gameObject.SetActive(true);
 
             for (int i = 0; i < scores.Length; i++)
@@ -46,7 +69,7 @@ public class TableCell : MonoBehaviour
                 if (i < state.points.Length)
                 {
                     scores[i].transform.parent.gameObject.SetActive(true);
-                    scores[i].text = gameState.players[i].playerName[0] + ": " + state.points[i];
+                    scores[i].text = state.points[i] + " (" + gameState.players[i].playerName[0] + ")";
                 }
                 else
                 {
@@ -57,8 +80,12 @@ public class TableCell : MonoBehaviour
         }
         else
         {
-            bgImage.color = Color.white;
-            symbolText.gameObject.SetActive(true);
+            bgImage.sprite = emptyCardSprite;
+
+            centerText.gameObject.SetActive(true);
+            topLeftText.gameObject.SetActive(true);
+            botRightText.gameObject.SetActive(true);
+
             scoresContainer.gameObject.SetActive(false);
         }
     }
