@@ -23,7 +23,7 @@ public class TableRow : MonoBehaviour
         for (int i = 0; i < cellCount; i++)
         {
             TableCell c = Instantiate(cellPrefab, cellParent);
-            c.Initialize(c.titles[i], c.symbols[i], rowIndex, i);
+            c.Initialize(TableCell.titles[i], TableCell.symbols[i], rowIndex, i);
             cells.Add(c);
         }
     }
