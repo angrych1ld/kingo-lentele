@@ -18,7 +18,7 @@ public class TableCell : MonoBehaviour
     [SerializeField] private Sprite emptyCardSprite;
     [SerializeField] private Sprite cardBgSprite;
 
-    public static string[] symbols = new string[] { "K", "B", "D", "♥", "K", "2", "E-", "E+", "1A", "2A" };
+    public static string[] symbols = new string[] { "K", "B", "D", "♥", "K", "2P", "E-", "E+", "1A", "2A" };
     public static string[] titles = new string[] {
         "Kingas",
         "Bartukai",

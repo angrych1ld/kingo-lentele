@@ -39,7 +39,7 @@ public class MainMenu : MonoBehaviour
         for (int i = 0; i < scores.Length; i++)
         {
             existingGameText.text += "<nobr>" + existing.players[i].playerName + "</nobr>" +
-                " - " + scores[i] + System.Environment.NewLine;
+                "   " + scores[i] + System.Environment.NewLine;
         }
 
 

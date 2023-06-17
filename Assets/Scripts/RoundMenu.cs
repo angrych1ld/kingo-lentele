@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class RoundMenu : MonoBehaviour
 {
@@ -16,9 +17,18 @@ public class RoundMenu : MonoBehaviour
 
     private void Awake()
     {
-        foreach (RoundSlider rs in sliders)
+        for (int i = 0; i < sliders.Length; i++)
         {
+            RoundSlider rs = sliders[i];
+            int index = i;
             rs.slider.onValueChanged.AddListener(OnSliderChanged);
+
+            var entry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerClick
+            };
+            entry.callback.AddListener((e) => OnSliderPointerClick(e, index));
+            rs.eventTrigger.triggers.Add(entry);
         }
     }
 
@@ -41,9 +51,26 @@ public class RoundMenu : MonoBehaviour
             sliders[i].slider.maxValue = config.tickCount;
             sliders[i].slider.SetValueWithoutNotify(state.points[i] / config.tickValue);
             sliders[i].playerName = gameState.players[i].playerName;
+            sliders[i].SetStepCount(config.tickCount);
         }
 
         UpdateMenuState();
+    }
+
+    private void OnSliderPointerClick(BaseEventData baseData, int sliderIndex)
+    {
+        PointerEventData data = baseData as PointerEventData;
+
+        if (data.button == PointerEventData.InputButton.Right)
+        {
+            int totalTicks = 0;
+            for (int i = 0; i < sliders.Length; i++)
+            {
+                if (i == sliderIndex) continue;
+                totalTicks += (int)sliders[i].slider.value;
+            }
+            sliders[sliderIndex].slider.value = Mathf.Clamp(roundConfig.tickCount - totalTicks, 0, roundConfig.tickCount);
+        }
     }
 
     private void OnSliderChanged(float v)
