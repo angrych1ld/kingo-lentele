@@ -20,6 +20,14 @@ public class MainMenu : MonoBehaviour
 
     private HistoricalAnalysis historicalAnalysis;
 
+    public StatBar statBarPrefab;
+    public Transform statBarParent;
+    public TextMeshProUGUI statTitleText;
+    private List<StatBar> statBarEntries = new List<StatBar>();
+    private int curStatIndex = 0;
+    public Button prevStatButton;
+    public Button nextStatButton;
+
     private void Awake()
     {
         foreach (var input in playerNameInputs)
@@ -42,8 +50,6 @@ public class MainMenu : MonoBehaviour
                 "   " + scores[i] + System.Environment.NewLine;
         }
 
-
-
         OnPlayerNameInputChanged();
 
         byte[] historicalData = SaveManager.GetHistoricalData();
@@ -58,7 +64,49 @@ public class MainMenu : MonoBehaviour
         {
             historicalDataParent.gameObject.SetActive(true);
             UpdatePastGames(historicalAnalysis);
+            SetStat(0);
         }
+    }
+
+    private void SetStat(int statIndex)
+    {
+        statIndex = Mathf.Clamp(statIndex, 0, historicalAnalysis.statAnalyses.Count - 1);
+
+        curStatIndex = statIndex;
+        foreach (StatBar bar in statBarEntries)
+        {
+            Destroy(bar.gameObject);
+        }
+        statBarEntries.Clear();
+
+        HistoricalAnalysis.StatAnalysis stat = historicalAnalysis.statAnalyses[statIndex];
+        statTitleText.text = stat.statTitle;
+
+        float valueRange = stat.GetValueRange();
+
+        foreach (var p in stat.players)
+        {
+            StatBar entry = Instantiate(statBarPrefab, statBarParent);
+            statBarEntries.Add(entry);
+
+            entry.label.text = p.playerName + System.Environment.NewLine +
+                p.statValue + " (" + p.statCount + ")";
+
+            entry.SetBarSize01(valueRange <= 0 ? 1f : p.statValue / valueRange);
+        }
+
+        prevStatButton.interactable = curStatIndex > 0;
+        nextStatButton.interactable = curStatIndex < historicalAnalysis.statAnalyses.Count - 1;
+    }
+
+    public void OnPrevStatClick()
+    {
+        SetStat(curStatIndex - 1);
+    }
+
+    public void OnNextStatClick()
+    {
+        SetStat(curStatIndex + 1);
     }
 
     private void UpdatePastGames(HistoricalAnalysis historicalAnalysis)
