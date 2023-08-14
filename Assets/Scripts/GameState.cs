@@ -13,6 +13,32 @@ public struct GameState
 
     public PlayerState[] players;
 
+    public int GetPlayerIndexOfNextTurn()
+    {
+        int pIndex = 0;
+        int min = 1000000;
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            int playerCompleted = 0;
+            for (int j = 0; j < players[i].rounds.Length; j++)
+            {
+                if (players[i].rounds[j].PointsAssigned())
+                {
+                    playerCompleted++;
+                }
+            }
+
+            if (playerCompleted < min)
+            {
+                min = playerCompleted;
+                pIndex = i;
+            }
+        }
+
+        return pIndex;
+    }
+
     public float GetCompletion()
     {
         int total = 0;

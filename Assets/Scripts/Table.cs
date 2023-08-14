@@ -10,6 +10,8 @@ public class Table : MonoBehaviour
 
     public void ApplyGameState(GameState state, GameConfig config)
     {
+        int nextPlayerIndex = state.GetPlayerIndexOfNextTurn();
+
         if (rows.Count != state.players.Length)
         {
             foreach (TableRow r in rowParent.GetComponentsInChildren<TableRow>())
@@ -30,6 +32,7 @@ public class Table : MonoBehaviour
         for (int i = 0; i < state.players.Length && i < rows.Count; i++)
         {
             rows[i].ApplyState(state, i, totalScores[i]);
+            rows[i].nameGlowText.gameObject.SetActive(nextPlayerIndex == i);
         }
     }
 }

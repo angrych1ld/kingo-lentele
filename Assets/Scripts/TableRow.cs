@@ -7,6 +7,7 @@ using TMPro;
 public class TableRow : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
+    public TextMeshProUGUI nameGlowText;
 
     [SerializeField] private TableCell cellPrefab = null;
     [SerializeField] private Transform cellParent = null;
@@ -52,5 +53,6 @@ public class TableRow : MonoBehaviour
         }
 
         nameText.text = "<nobr>" + state.playerName + "</nobr>" + "\n" + totalScore;
+        nameGlowText.text = nameText.text;
     }
 }
