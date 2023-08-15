@@ -27,6 +27,7 @@ public class MainMenu : MonoBehaviour
     private int curStatIndex = 0;
     public Button prevStatButton;
     public Button nextStatButton;
+    public GameConfig config3p;
 
     private void Awake()
     {
@@ -54,7 +55,7 @@ public class MainMenu : MonoBehaviour
 
         byte[] historicalData = SaveManager.GetHistoricalData();
         List<GameState> historicalGames = GameState.DeserializeArray(historicalData);
-        historicalAnalysis = HistoricalAnalysis.Create(historicalGames);
+        historicalAnalysis = HistoricalAnalysis.Create(historicalGames, existing, config3p);
 
         if (historicalAnalysis.games.Count == 0)
         {
@@ -80,19 +81,23 @@ public class MainMenu : MonoBehaviour
         statBarEntries.Clear();
 
         HistoricalAnalysis.StatAnalysis stat = historicalAnalysis.statAnalyses[statIndex];
-        statTitleText.text = stat.statTitle;
+        statTitleText.text = "(" + (curStatIndex + 1) + "/" +
+            historicalAnalysis.statAnalyses.Count + ") " +
+            stat.statTitle;
 
-        float valueRange = stat.GetValueRange();
+        float minVal = stat.players.Count == 0 ? 0 : stat.players.Min(p => p.statValue);
+        float maxVal = stat.players.Count == 0 ? 0 : stat.players.Max(p => p.statValue);
 
         foreach (var p in stat.players)
         {
             StatBar entry = Instantiate(statBarPrefab, statBarParent);
             statBarEntries.Add(entry);
 
-            entry.label.text = p.playerName + System.Environment.NewLine +
-                p.statValue + " (" + p.statCount + ")";
+            entry.label.text = p.playerName + " (" + p.statCount + ")" + System.Environment.NewLine +
+                p.statValue;
 
-            entry.SetBarSize01(valueRange <= 0 ? 1f : p.statValue / valueRange);
+            entry.SetBarSize01(minVal == maxVal ? 1f
+                : Mathf.InverseLerp(minVal, maxVal, p.statValue));
         }
 
         prevStatButton.interactable = curStatIndex > 0;

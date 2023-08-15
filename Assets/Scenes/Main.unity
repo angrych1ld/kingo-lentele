@@ -2656,8 +2656,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -95}
-  m_SizeDelta: {x: -40, y: -210}
+  m_AnchoredPosition: {x: 0, y: -105}
+  m_SizeDelta: {x: -40, y: -230}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &685112814
 MonoBehaviour:
@@ -7730,8 +7730,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -59.04}
-  m_SizeDelta: {x: -80, y: 82.7}
+  m_AnchoredPosition: {x: 0, y: -80}
+  m_SizeDelta: {x: -80, y: 80}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1580458312
 CanvasRenderer:
@@ -7789,8 +7789,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8351,6 +8351,7 @@ MonoBehaviour:
   statTitleText: {fileID: 1580458313}
   prevStatButton: {fileID: 1427798803}
   nextStatButton: {fileID: 765724958}
+  config3p: {fileID: 11400000, guid: f503f96d089b4714a9cabc6ec6458524, type: 2}
 --- !u!1 &1900096736
 GameObject:
   m_ObjectHideFlags: 0
